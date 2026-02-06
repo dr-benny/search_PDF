@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pip3 install -r requirements.txt"
+    "build": "pip3 install -r requirements.txt",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
