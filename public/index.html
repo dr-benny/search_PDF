@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบค้นหาและจัดการ PDF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .glass {
+                @apply bg-white/80 dark:bg-slate-800/80 backdrop-blur-md;
+            }
+        }
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()"
+        class="absolute top-6 right-6 p-3 rounded-full bg-white dark:bg-slate-800 shadow-lg text-xl hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-primary-500 theme-toggle"
+        title="เปลี่ยนธีม">
+        🌙
+    </button>
+
+    <div class="w-full max-w-4xl">
+        <!-- Main Card -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700">
+
+            <!-- Header -->
+            <div class="p-8 pb-0 text-center">
+                <h1
+                    class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-600 dark:from-primary-400 dark:to-violet-400 mb-8">
+                    ระบบค้นหาและจัดการ PDF
+                </h1>
+
+                <!-- Tabs -->
+                <div class="inline-flex bg-slate-100 dark:bg-slate-700/50 p-1.5 rounded-2xl mb-8">
+                    <button onclick="switchTab('search')"
+                        class="tab-btn active px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                        ค้นหาเอกสาร
+                    </button>
+                    <button onclick="switchTab('manage')"
+                        class="tab-btn px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200">
+                        จัดการไฟล์
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-8 pt-0">
+
+                <!-- Search Tab -->
+                <div id="search" class="tab-content block animate-fade-in">
+                    <div class="relative mb-6 group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-6 w-6 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" id="searchTerm"
+                            class="w-full pl-12 pr-4 py-4 text-lg bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all placeholder:text-slate-400"
+                            placeholder="พิมพ์เลขที่ต้องการค้นหา..." autocomplete="off">
+
+                        <!-- Suggestions -->
+                        <div id="suggestion-box"
+                            class="absolute w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50 hidden">
+                        </div>
+                    </div>
+
+                    <button id="searchBtn"
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 rounded-2xl shadow-lg shadow-primary-600/30 active:scale-[0.98] transition-all text-lg">
+                        ค้นหา
+                    </button>
+
+                    <div id="status" class="hidden mt-6 text-center text-slate-500 dark:text-slate-400 animate-pulse">
+                        กำลังค้นหาข้อมูล...
+                    </div>
+
+                    <div id="results" class="mt-8 space-y-4"></div>
+                </div>
+
+                <!-- Manage Tab -->
+                <div id="manage" class="tab-content hidden animate-fade-in">
+                    <!-- Upload Zone -->
+                    <div id="dropZone"
+                        class="group relative border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center cursor-pointer hover:border-primary-500 dark:hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition-all duration-300 mb-8">
+                        <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                        <div class="flex flex-col items-center">
+                            <svg class="w-12 h-12 text-slate-400 group-hover:text-primary-500 transition-colors mb-4"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p
+                                class="text-slate-500 dark:text-slate-400 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-300">
+                                คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่
+                            </p>
+                            <p class="text-sm text-slate-400 mt-2">รองรับเฉพาะไฟล์ PDF</p>
+                        </div>
+                    </div>
+
+                    <!-- File List Header & Search -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-4">
+                        <div class="w-full sm:flex-1">
+                            <h2 class="text-base sm:text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">📁
+                                ไฟล์ในระบบ</h2>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="fileSearch" onkeyup="filterFiles()"
+                                    class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:text-slate-200 placeholder:text-slate-400 transition-all"
+                                    placeholder="กรองรายชื่อไฟล์...">
+                            </div>
+                        </div>
+                        <div class="flex gap-2 w-full sm:w-auto self-end">
+                            <button id="deleteSelectedBtn" onclick="deleteSelected()" disabled
+                                class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                ลบที่เลือก
+                            </button>
+                            <button onclick="loadFiles()"
+                                class="px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-lg text-sm font-medium transition-colors">
+                                รีเฟรช
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500 text-sm">
+                                    <th class="p-3 w-10 text-center">
+                                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()"
+                                            class="rounded border-slate-300 text-primary-600 focus:ring-primary-500">
+                                    </th>
+                                    <th class="p-3 font-medium">ชื่อไฟล์</th>
+                                    <th class="p-3 font-medium">ขนาด</th>
+                                    <th class="p-3 w-16"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="fileListBody" class="text-sm divide-y divide-slate-100 dark:divide-slate-700/50">
+                                <!-- Files populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Download Modal -->
+    <div id="downloadModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop">
+        </div>
+
+        <!-- Modal Panel -->
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-2xl transition-all scale-95 opacity-0 sm:w-full sm:max-w-lg border border-slate-100 dark:border-slate-700"
+                id="modalPanel">
+                <div class="bg-white dark:bg-slate-800 px-6 pb-6 pt-6">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-lg font-semibold leading-6 text-slate-900 dark:text-white" id="modalTitle">
+                                ตั้งชื่อไฟล์</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                                    กำหนดชื่อไฟล์ที่ต้องการบันทึก (ไม่ต้องใส่นามสกุล .pdf)
+                                </p>
+                                <input type="text" id="modalInput"
+                                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-slate-900 dark:text-white placeholder:text-slate-400"
+                                    placeholder="ชื่อไฟล์..." autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-700/30 px-6 py-4 sm:flex sm:flex-row-reverse sm:px-8 gap-3">
+                    <button type="button" id="modalConfirmBtn"
+                        class="inline-flex w-full justify-center rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 sm:w-auto transition-colors">
+                        ดาวน์โหลด
+                    </button>
+                    <button type="button" id="modalCancelBtn"
+                        class="mt-3 inline-flex w-full justify-center rounded-xl bg-white dark:bg-slate-800 px-5 py-2.5 text-sm font-semibold text-slate-900 dark:text-slate-200 shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 sm:mt-0 sm:w-auto transition-colors">
+                        ยกเลิก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript preserves exact logic -->
+    <script>
+        // Init Tailwind Config for Tab Styles
+        const activeTabClass = ['bg-white', 'text-primary-600', 'shadow-md', 'dark:bg-slate-800', 'dark:text-primary-400'];
+        const inactiveTabClass = ['text-slate-500', 'hover:text-slate-700', 'dark:text-slate-400', 'dark:hover:text-slate-200'];
+
+        // Theme Logic
+        const toggleBtn = document.querySelector('.theme-toggle');
+        const root = document.documentElement;
+
+        // Initial Theme Check
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            root.classList.add('dark');
+            toggleBtn.textContent = '☀️';
+        } else {
+            root.classList.remove('dark');
+            toggleBtn.textContent = '🌙';
+        }
+
+        function toggleTheme() {
+            if (root.classList.contains('dark')) {
+                root.classList.remove('dark');
+                localStorage.theme = 'light';
+                toggleBtn.textContent = '🌙';
+            } else {
+                root.classList.add('dark');
+                localStorage.theme = 'dark';
+                toggleBtn.textContent = '☀️';
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            const btns = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            // Buttons
+            btns.forEach(btn => {
+                // Reset to base state
+                btn.className = 'tab-btn px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200';
+                if ((tabId === 'search' && btn.innerText.includes('ค้นหา')) ||
+                    (tabId === 'manage' && btn.innerText.includes('จัดการ'))) {
+                    // Active State
+                    btn.classList.add('bg-white', 'dark:bg-slate-600', 'text-primary-600', 'dark:text-white', 'shadow-sm', 'font-semibold');
+                } else {
+                    // Inactive State
+                    btn.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:text-slate-700', 'dark:hover:text-slate-200');
+                }
+            });
+
+            // Content
+            contents.forEach(c => c.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            if (tabId === 'manage') loadFiles();
+        }
+
+        // Initialize Tabs
+        switchTab('search');
+
+        // --- Search Logic ---
+        const searchBtn = document.getElementById('searchBtn');
+        const resultsDiv = document.getElementById('results');
+        const statusDiv = document.getElementById('status');
+        const inputTerm = document.getElementById('searchTerm');
+
+        inputTerm.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchBtn.click();
+            }
+        });
+
+        searchBtn.addEventListener('click', async () => {
+            const term = inputTerm.value.trim();
+
+            if (!term) {
+                alert('กรุณาระบุเลขที่ต้องการค้นหา');
+                return;
+            }
+
+            // Save to History
+            saveSearchHistory(term);
+
+            resultsDiv.innerHTML = '';
+            statusDiv.classList.remove('hidden');
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<span class="animate-pulse">กำลังค้นหา...</span>';
+
+            try {
+                let url = `/api/search?term=${encodeURIComponent(term)}`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                statusDiv.classList.add('hidden');
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'ค้นหา';
+
+                if (response.ok) {
+                    if (data.length === 0) {
+                        resultsDiv.innerHTML = `
+                            <div class="p-6 text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                                <p class="text-slate-500">ไม่พบข้อมูลที่ค้นหา</p>
+                            </div>`;
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 flex justify-between items-center hover:border-primary-500 dark:hover:border-primary-500 transition-colors shadow-sm group';
+                        div.innerHTML = `
+                            <div class="text-left">
+                                <span class="block font-medium text-slate-800 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" title="${item.path}">${item.file}</span>
+                                <span class="text-sm text-slate-400">หน้า ${item.page}</span>
+                            </div>
+                            <a href="#" onclick="downloadPage(event, '${item.path.replace(/'/g, "\\'")}', ${item.page})" 
+                               class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-primary-900/30 dark:hover:text-primary-400 transition-all">
+                                ดาวน์โหลด
+                            </a>
+                        `;
+                        resultsDiv.appendChild(div);
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p class="text-red-500 text-center">เกิดข้อผิดพลาด: ${data.error}</p>`;
+                }
+
+            } catch (err) {
+                console.error(err);
+                statusDiv.classList.add('hidden');
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'ค้นหา';
+                resultsDiv.innerHTML = `<p class="text-red-500 text-center">เกิดข้อผิดพลาดในการเชื่อมต่อ</p>`;
+            }
+        });
+
+        // --- File Management Logic ---
+        let allFiles = [];
+        async function loadFiles() {
+            const tbody = document.getElementById('fileListBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center p-8 text-slate-400">กำลังโหลด...</td></tr>';
+
+            try {
+                const response = await fetch('/api/files');
+                const files = await response.json();
+                allFiles = files.map(f => f.name);
+
+                tbody.innerHTML = '';
+                document.getElementById('selectAll').checked = false;
+                updateDeleteButton();
+
+                if (files.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center p-8 text-slate-400">ไม่พบไฟล์ในระบบ</td></tr>';
+                    return;
+                }
+
+                files.forEach(file => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+                    tr.innerHTML = `
+                        <td class="p-3 text-center"><input type="checkbox" class="file-checkbox rounded border-slate-300 text-primary-600 focus:ring-primary-500" value="${file.name}" onclick="updateDeleteButton()"></td>
+                        <td class="p-3 font-medium text-slate-700 dark:text-slate-300">${file.name}</td>
+                        <td class="p-3 text-slate-500 text-sm">${(file.size / 1024).toFixed(1)} KB</td>
+                        <td class="p-3 text-center">
+                            <button class="text-slate-400 hover:text-red-500 transition-colors p-1" onclick="deleteFile('${file.name}')" title="ลบไฟล์">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-8 text-red-500">เกิดข้อผิดพลาดในการโหลดไฟล์</td></tr>';
+            }
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateDeleteButton();
+        }
+
+        function updateDeleteButton() {
+            const checkboxes = document.querySelectorAll('.file-checkbox:checked');
+            const btn = document.getElementById('deleteSelectedBtn');
+            btn.disabled = checkboxes.length === 0;
+            btn.textContent = checkboxes.length > 0 ? `ลบ (${checkboxes.length})` : 'ลบที่เลือก';
+        }
+
+        async function deleteFile(filename) {
+            if (!confirm(`คุณต้องการลบไฟล์ "${filename}" ใช่หรือไม่?`)) return;
+
+            try {
+                const response = await fetch('/api/files', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: filename })
+                });
+
+                if (response.ok) {
+                    loadFiles(); // Refresh list
+                } else {
+                    alert('ลบไฟล์ไม่สำเร็จ');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการลบไฟล์');
+            }
+        }
+
+        async function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.file-checkbox:checked');
+            if (checkboxes.length === 0) return;
+
+            if (!confirm(`คุณต้องการลบ ${checkboxes.length} ไฟล์ใช่หรือไม่?`)) return;
+
+            const fileNames = Array.from(checkboxes).map(cb => cb.value);
+
+            try {
+                const response = await fetch('/api/files', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ names: fileNames })
+                });
+
+                if (response.ok) {
+                    loadFiles(); // Refresh list
+                } else {
+                    alert('ลบไฟล์บางรายการไม่สำเร็จ');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการลบไฟล์');
+            }
+        }
+
+        function filterFiles() {
+            const input = document.getElementById('fileSearch');
+            const filter = input.value.toLowerCase();
+            const rows = document.getElementById('fileListBody').getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                // If it's the "No files found" row
+                if (rows[i].cells.length === 1) continue;
+
+                // Name is in the 2nd column (index 1)
+                const nameCell = rows[i].getElementsByTagName('td')[1];
+                if (nameCell) {
+                    const txtValue = nameCell.textContent || nameCell.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Upload Logic
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleUpload(e.target.files[0]));
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+            if (e.dataTransfer.files.length) {
+                handleUpload(e.dataTransfer.files[0]);
+            }
+        });
+
+        async function handleUpload(file) {
+            if (!file) return;
+            if (file.type !== 'application/pdf') {
+                alert('รองรับเฉพาะไฟล์ PDF เท่านั้น');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const pTag = dropZone.querySelector('p');
+            const originalText = pTag.innerHTML;
+            pTag.textContent = 'กำลังอัปโหลด...';
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    pTag.innerHTML = '<span class="text-green-500">อัปโหลดสำเร็จ!</span>';
+                    setTimeout(() => {
+                        pTag.innerHTML = originalText;
+                        loadFiles();
+                    }, 1500);
+                } else {
+                    pTag.innerHTML = '<span class="text-red-500">อัปโหลดไม่สำเร็จ</span>';
+                    setTimeout(() => {
+                        pTag.innerHTML = originalText;
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error(err);
+                pTag.innerHTML = '<span class="text-red-500">เกิดข้อผิดพลาด</span>';
+            }
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('downloadModal');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const modalPanel = document.getElementById('modalPanel');
+        const modalInput = document.getElementById('modalInput');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+
+        let currentDownloadConfig = null;
+
+        function showModal(defaultName) {
+            modal.classList.remove('hidden');
+            // Animate in
+            requestAnimationFrame(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalPanel.classList.remove('scale-95', 'opacity-0');
+                modalPanel.classList.add('scale-100', 'opacity-100');
+            });
+            modalInput.value = defaultName;
+            modalInput.focus();
+            // Select all text for easy replacement
+            modalInput.select();
+        }
+
+        function hideModal() {
+            // Animate out
+            modalBackdrop.classList.add('opacity-0');
+            modalPanel.classList.remove('scale-100', 'opacity-100');
+            modalPanel.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                currentDownloadConfig = null;
+            }, 200); // Match transition duration
+        }
+
+        function triggerDownload() {
+            if (!currentDownloadConfig) return;
+
+            const customName = modalInput.value.trim();
+            const { path, page, defaultName } = currentDownloadConfig;
+            const finalName = customName || defaultName.replace('.pdf', '');
+
+            window.location.href = `/api/download?path=${encodeURIComponent(path)}&page=${page}&customName=${encodeURIComponent(finalName)}`;
+            hideModal();
+        }
+
+        // Event Listeners for Modal
+        modalCancelBtn.addEventListener('click', hideModal);
+        modalConfirmBtn.addEventListener('click', triggerDownload);
+
+        // Enter key to confirm
+        modalInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') triggerDownload();
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.closest('.flex') === e.target) {
+                hideModal();
+            }
+        });
+
+        function downloadPage(event, path, page) {
+            event.preventDefault();
+            const defaultFilename = `page_${page}_${path.split('/').pop()}`;
+            // Remove .pdf extension for display in input
+            const displayValue = defaultFilename.replace('.pdf', '');
+
+            currentDownloadConfig = { path, page, defaultName: defaultFilename };
+            showModal(displayValue);
+        }
+
+
+        // --- Suggestion Logic ---
+        const suggestionBox = document.getElementById('suggestion-box');
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+        function saveSearchHistory(term) {
+            if (!term) return;
+            // Remove duplicate if exists
+            searchHistory = searchHistory.filter(item => item !== term);
+            // Add to top
+            searchHistory.unshift(term);
+            // Limit to 10
+            if (searchHistory.length > 10) searchHistory.pop();
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+        }
+
+        function selectSuggestion(text) {
+            inputTerm.value = text;
+            suggestionBox.style.display = 'none';
+            searchBtn.click();
+        }
+
+        loadFiles();
+
+        inputTerm.addEventListener('input', async function () {
+            const val = this.value.toLowerCase().trim();
+            if (!val) {
+                suggestionBox.classList.add('hidden');
+                return;
+            }
+
+            const matches = [];
+
+
+
+            // 3. Content Matches (API)
+            try {
+                const response = await fetch(`/api/suggestions?q=${encodeURIComponent(val)}`);
+                if (response.ok) {
+                    const contentMatches = await response.json();
+                    contentMatches.forEach(item => {
+                        if (!matches.find(m => m.text === item.text)) {
+                            matches.push({ text: item.text, type: item.type });
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Error fetching suggestions:', err);
+            }
+
+            // Render
+            if (matches.length > 0) {
+                suggestionBox.innerHTML = matches.slice(0, 10).map(m => `
+                    <div class="p-3 px-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex justify-between items-center border-b border-slate-50 dark:border-slate-700 last:border-0 transition-colors" onclick="selectSuggestion('${m.text}')">
+                        <span class="text-slate-700 dark:text-slate-200">${m.text}</span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">${m.type}</span>
+                    </div>
+                `).join('');
+                suggestionBox.classList.remove('hidden');
+            } else {
+                suggestionBox.classList.add('hidden');
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!inputTerm.contains(e.target) && !suggestionBox.contains(e.target)) {
+                suggestionBox.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

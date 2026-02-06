@@ -1,0 +1,229 @@
+Running indexing script...
+Server running at http://localhost:3001
+GET /api/suggestions hit!
+Indexer output: Indexing 2 files in 'assets'...
+Indexing complete. Found 652 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:20:01.027Z] Loaded search index with 652 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 1 files in 'assets'...
+Indexing complete. Found 501 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:20:59.876Z] Loaded search index with 501 entries.
+Running indexing script...
+Indexer output: Indexing 2 files in 'assets'...
+Indexing complete. Found 652 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:21:07.282Z] Loaded search index with 652 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 3 files in 'assets'...
+Indexing complete. Found 653 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:22:41.859Z] Loaded search index with 653 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 4 files in 'assets'...
+Indexing complete. Found 654 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:25:18.215Z] Loaded search index with 654 entries.
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 5 files in 'assets'...
+Indexing complete. Found 654 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:25:19.386Z] Loaded search index with 654 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 3 files in 'assets'...
+Indexing complete. Found 2 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:27:42.774Z] Loaded search index with 2 entries.
+Running indexing script...
+Indexer output: Indexing 0 files in 'assets'...
+Indexing complete. Found 0 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:27:53.997Z] Loaded search index with 0 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 1 files in 'assets'...
+Indexing complete. Found 501 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:28:06.858Z] Loaded search index with 501 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 2 files in 'assets'...
+Indexing complete. Found 652 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:28:39.572Z] Loaded search index with 652 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Searching for "3392252280001" in 6 files in "/home/ben/tenmeter"...
+Error reading /home/ben/tenmeter/test_dup_1.pdf: Error
+    at UnknownErrorExceptionClosure (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:443:37)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:446:2)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:7939:23)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:88:18
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:91:10
+    at webpackUniversalModuleDefinition (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:18:20)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:25:3)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14) {
+  message: 'bad XRef entry',
+  details: 'FormatError: bad XRef entry'
+}
+Error reading /home/ben/tenmeter/test_dup_2.pdf: Error
+    at UnknownErrorExceptionClosure (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:443:37)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:446:2)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:7939:23)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:88:18
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:91:10
+    at webpackUniversalModuleDefinition (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:18:20)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:25:3)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14) {
+  message: 'bad XRef entry',
+  details: 'FormatError: bad XRef entry'
+}
+Error reading /home/ben/tenmeter/test_upload_99.pdf: Error
+    at UnknownErrorExceptionClosure (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:443:37)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:446:2)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:7939:23)
+    at __w_pdfjs_require__ (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:45:30)
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:88:18
+    at /home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:91:10
+    at webpackUniversalModuleDefinition (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:18:20)
+    at Object.<anonymous> (/home/ben/tenmeter/node_modules/pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js:25:3)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14) {
+  message: 'bad XRef entry',
+  details: 'FormatError: bad XRef entry'
+}
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Searching for "3392252280001" in 2 files in "/home/ben/tenmeter"...
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Searching for "55500033" in 2 files in "/home/ben/tenmeter"...
+Searching for "55500033" in 2 files in "/home/ben/tenmeter"...
+Running indexing script...
+Indexer output: Indexing 1 files in 'assets'...
+Indexing complete. Found 501 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:40:32.032Z] Loaded search index with 501 entries.
+Running indexing script...
+Indexer output: Indexing 0 files in 'assets'...
+Indexing complete. Found 0 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:40:34.463Z] Loaded search index with 0 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Running indexing script...
+Indexer output: Indexing 1 files in 'assets'...
+Indexing complete. Found 501 unique numbers. Saved to 'search_index.json'.
+
+[2026-02-06T15:40:49.401Z] Loaded search index with 501 entries.
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+GET /api/suggestions hit!
+Searching for "55500001" in 1 files in "/home/ben/tenmeter"...
+Searching for "55500001" in 1 files in "/home/ben/tenmeter"...
