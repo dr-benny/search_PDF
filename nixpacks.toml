@@ -1,0 +1,10 @@
+provider = ["node", "python"]
+
+[phases.setup]
+nixPkgs = ["nodejs", "python311", "ffmpeg"]
+
+[phases.install]
+cmds = ["npm install", "pip install -r requirements.txt"]
+
+[start]
+cmd = "node server.js"
