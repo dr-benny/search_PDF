@@ -1,7 +1,7 @@
 providers = ["node"]
 
 [phases.setup]
-nixPkgs = ["nodejs", "npm", "python3", "python3-pip", "ffmpeg"]
+nixPkgs = ["...", "python3", "python3-pip", "ffmpeg"]
 
 [phases.install]
 cmds = ["npm install", "python3 -m pip install --break-system-packages -r requirements.txt"]
