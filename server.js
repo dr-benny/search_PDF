@@ -70,7 +70,8 @@ app.use(express.json());
 function runIndexer() {
     return new Promise((resolve, reject) => {
         console.log('Running indexing script...');
-        exec('python3 extract_numbers.py assets', (error, stdout, stderr) => {
+        const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+        exec(`${pythonCommand} extract_numbers.py assets`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Indexer error: ${error.message}`);
                 // Don't reject, just resolve so we don't crash requests
