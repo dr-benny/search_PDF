@@ -25,12 +25,12 @@ def extract_numbers_from_pdfs(directory="assets", output_file="search_index.json
             for page in reader.pages:
                 text = page.extract_text()
                 if text:
-                    # Find sequences of 3 or more digits
-                    # We normalize by removing spaces or dashes if they break up numbers, 
-                    # but for now, let's just find contiguous digits or digits with simple separators
+                    # Find sequences of numbers or alphanumeric codes
+                    # Pattern 1: Pure numbers (8-13 digits)
+                    # Pattern 2: Alphanumeric codes (8-13 characters with at least one digit)
                     
-                    # Refined pattern: Look for 8 to 13 digits (Machine Numbers can be 8 digits too)
-                    matches = re.findall(r'\b\d{8,13}\b', text)
+                    # Match both pure digits and alphanumeric sequences
+                    matches = re.findall(r'\b\d{8,13}\b|\b[A-Z0-9]{8,13}\b', text, re.IGNORECASE)
                     
                     for match in matches:
                         if match not in index:

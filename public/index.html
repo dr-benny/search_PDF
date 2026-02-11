@@ -57,137 +57,136 @@
 
     <div class="w-full max-w-4xl">
         <!-- Main Card -->
-        <div
-            class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700">
+        class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700">
 
-            <!-- Header -->
-            <div class="p-8 pb-0 text-center">
-                <h1
-                    class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-600 dark:from-primary-400 dark:to-violet-400 mb-8">
-                    ระบบค้นหาและจัดการ PDF
-                </h1>
+        <!-- Header -->
+        <div class="p-8 pb-0 text-center">
+            <h1
+                class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-600 dark:from-primary-400 dark:to-violet-400 mb-8">
+                ระบบค้นหาและจัดการ PDF
+            </h1>
 
-                <!-- Tabs -->
-                <div class="inline-flex bg-slate-100 dark:bg-slate-700/50 p-1.5 rounded-2xl mb-8">
-                    <button onclick="switchTab('search')"
-                        class="tab-btn active px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
-                        ค้นหาเอกสาร
-                    </button>
-                    <button onclick="switchTab('manage')"
-                        class="tab-btn px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200">
-                        จัดการไฟล์
-                    </button>
-                </div>
-            </div>
-
-            <!-- Content Area -->
-            <div class="p-8 pt-0">
-
-                <!-- Search Tab -->
-                <div id="search" class="tab-content block animate-fade-in">
-                    <div class="relative mb-6 group">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <svg class="h-6 w-6 text-slate-400 group-focus-within:text-primary-500 transition-colors"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <input type="text" id="searchTerm"
-                            class="w-full pl-12 pr-4 py-4 text-lg bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all placeholder:text-slate-400"
-                            placeholder="พิมพ์เลขที่ต้องการค้นหา..." autocomplete="off">
-
-                        <!-- Suggestions -->
-                        <div id="suggestion-box"
-                            class="absolute w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50 hidden">
-                        </div>
-                    </div>
-
-                    <button id="searchBtn"
-                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 rounded-2xl shadow-lg shadow-primary-600/30 active:scale-[0.98] transition-all text-lg">
-                        ค้นหา
-                    </button>
-
-                    <div id="status" class="hidden mt-6 text-center text-slate-500 dark:text-slate-400 animate-pulse">
-                        กำลังค้นหาข้อมูล...
-                    </div>
-
-                    <div id="results" class="mt-8 space-y-4"></div>
-                </div>
-
-                <!-- Manage Tab -->
-                <div id="manage" class="tab-content hidden animate-fade-in">
-                    <!-- Upload Zone -->
-                    <div id="dropZone"
-                        class="group relative border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center cursor-pointer hover:border-primary-500 dark:hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition-all duration-300 mb-8">
-                        <input type="file" id="fileInput" accept=".pdf" class="hidden">
-                        <div class="flex flex-col items-center">
-                            <svg class="w-12 h-12 text-slate-400 group-hover:text-primary-500 transition-colors mb-4"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                            <p
-                                class="text-slate-500 dark:text-slate-400 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-300">
-                                คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่
-                            </p>
-                            <p class="text-sm text-slate-400 mt-2">รองรับเฉพาะไฟล์ PDF</p>
-                        </div>
-                    </div>
-
-                    <!-- File List Header & Search -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-4">
-                        <div class="w-full sm:flex-1">
-                            <h2 class="text-base sm:text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">📁
-                                ไฟล์ในระบบ</h2>
-                            <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </div>
-                                <input type="text" id="fileSearch" onkeyup="filterFiles()"
-                                    class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:text-slate-200 placeholder:text-slate-400 transition-all"
-                                    placeholder="กรองรายชื่อไฟล์...">
-                            </div>
-                        </div>
-                        <div class="flex gap-2 w-full sm:w-auto self-end">
-                            <button id="deleteSelectedBtn" onclick="deleteSelected()" disabled
-                                class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                                ลบที่เลือก
-                            </button>
-                            <button onclick="loadFiles()"
-                                class="px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-lg text-sm font-medium transition-colors">
-                                รีเฟรช
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Table -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500 text-sm">
-                                    <th class="p-3 w-10 text-center">
-                                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()"
-                                            class="rounded border-slate-300 text-primary-600 focus:ring-primary-500">
-                                    </th>
-                                    <th class="p-3 font-medium">ชื่อไฟล์</th>
-                                    <th class="p-3 font-medium">ขนาด</th>
-                                    <th class="p-3 w-16"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="fileListBody" class="text-sm divide-y divide-slate-100 dark:divide-slate-700/50">
-                                <!-- Files populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
+            <!-- Tabs -->
+            <div class="inline-flex bg-slate-100 dark:bg-slate-700/50 p-1.5 rounded-2xl mb-8">
+                <button onclick="switchTab('search')"
+                    class="tab-btn active px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200">
+                    ค้นหาเอกสาร
+                </button>
+                <button onclick="switchTab('manage')"
+                    class="tab-btn px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200">
+                    จัดการไฟล์
+                </button>
             </div>
         </div>
+
+        <!-- Content Area -->
+        <div class="p-8 pt-0">
+
+            <!-- Search Tab -->
+            <div id="search" class="tab-content block animate-fade-in">
+                <div class="relative mb-6 group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-6 w-6 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <input type="text" id="searchTerm"
+                        class="w-full pl-12 pr-4 py-4 text-lg bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all placeholder:text-slate-400"
+                        placeholder="พิมพ์เลขที่ต้องการค้นหา..." autocomplete="off">
+
+                    <!-- Suggestions -->
+                    <div id="suggestion-box"
+                        class="absolute w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 z-50 hidden max-h-[500px] overflow-y-auto">
+                    </div>
+                </div>
+
+                <button id="searchBtn"
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 rounded-2xl shadow-lg shadow-primary-600/30 active:scale-[0.98] transition-all text-lg">
+                    ค้นหา
+                </button>
+
+                <div id="status" class="hidden mt-6 text-center text-slate-500 dark:text-slate-400 animate-pulse">
+                    กำลังค้นหาข้อมูล...
+                </div>
+
+                <div id="results" class="mt-8 space-y-4"></div>
+            </div>
+
+            <!-- Manage Tab -->
+            <div id="manage" class="tab-content hidden animate-fade-in">
+                <!-- Upload Zone -->
+                <div id="dropZone"
+                    class="group relative border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center cursor-pointer hover:border-primary-500 dark:hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition-all duration-300 mb-8">
+                    <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-12 h-12 text-slate-400 group-hover:text-primary-500 transition-colors mb-4"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p
+                            class="text-slate-500 dark:text-slate-400 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-300">
+                            คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่
+                        </p>
+                        <p class="text-sm text-slate-400 mt-2">รองรับเฉพาะไฟล์ PDF</p>
+                    </div>
+                </div>
+
+                <!-- File List Header & Search -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 mb-4">
+                    <div class="w-full sm:flex-1">
+                        <h2 class="text-base sm:text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">📁
+                            ไฟล์ในระบบ</h2>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <input type="text" id="fileSearch" onkeyup="filterFiles()"
+                                class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:text-slate-200 placeholder:text-slate-400 transition-all"
+                                placeholder="กรองรายชื่อไฟล์...">
+                        </div>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto self-end">
+                        <button id="deleteSelectedBtn" onclick="deleteSelected()" disabled
+                            class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                            ลบที่เลือก
+                        </button>
+                        <button onclick="loadFiles()"
+                            class="px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-lg text-sm font-medium transition-colors">
+                            รีเฟรช
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500 text-sm">
+                                <th class="p-3 w-10 text-center">
+                                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll()"
+                                        class="rounded border-slate-300 text-primary-600 focus:ring-primary-500">
+                                </th>
+                                <th class="p-3 font-medium">ชื่อไฟล์</th>
+                                <th class="p-3 font-medium">ขนาด</th>
+                                <th class="p-3 w-16"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileListBody" class="text-sm divide-y divide-slate-100 dark:divide-slate-700/50">
+                            <!-- Files populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
     </div>
 
     <!-- Custom Download Modal -->
@@ -652,7 +651,8 @@
 
         function selectSuggestion(text) {
             inputTerm.value = text;
-            suggestionBox.style.display = 'none';
+            suggestionBox.classList.add('hidden');
+            suggestionBox.style.removeProperty('display');
             searchBtn.click();
         }
 
@@ -686,13 +686,14 @@
 
             // Render
             if (matches.length > 0) {
-                suggestionBox.innerHTML = matches.slice(0, 10).map(m => `
-                    <div class="p-3 px-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex justify-between items-center border-b border-slate-50 dark:border-slate-700 last:border-0 transition-colors" onclick="selectSuggestion('${m.text}')">
+                suggestionBox.innerHTML = matches.map(m => `
+                    <div class="p-3 px-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex justify-between items-center border-b border-slate-50 dark:border-slate-700 last:border-0 transition-colors" onclick="selectSuggestion('${m.text.replace(/'/g, "\\'")}')">
                         <span class="text-slate-700 dark:text-slate-200">${m.text}</span>
                         <span class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">${m.type}</span>
                     </div>
                 `).join('');
                 suggestionBox.classList.remove('hidden');
+                suggestionBox.style.removeProperty('display');
             } else {
                 suggestionBox.classList.add('hidden');
             }

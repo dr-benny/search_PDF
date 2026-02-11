@@ -24,10 +24,7 @@ app.get('/api/suggestions', (req, res) => {
 
     // Filter index for matches
     for (const [number, files] of Object.entries(searchIndex)) {
-        // Check length (allow 8 to 13 digits)
-        if (number.length < 8 || number.length > 13) continue;
-
-        if (number.includes(qLower)) {
+        if (number.toLowerCase().includes(qLower)) {
             suggestions.push({
                 text: number,
                 type: `Found in ${files.length} file(s)`,
@@ -36,9 +33,34 @@ app.get('/api/suggestions', (req, res) => {
         }
     }
 
-    // Sort by length match (exact matches first) or just limit
-    // Return top 10
-    res.json(suggestions.slice(0, 10));
+    // Sort suggestions: Exact > StartsWith > EndsWith > Contains
+    suggestions.sort((a, b) => {
+        const textA = a.text.toLowerCase();
+        const textB = b.text.toLowerCase();
+        const query = qLower;
+
+        // 1. Exact match priority
+        if (textA === query) return -1;
+        if (textB === query) return 1;
+
+        // 2. Starts With priority
+        const startA = textA.startsWith(query);
+        const startB = textB.startsWith(query);
+        if (startA && !startB) return -1;
+        if (!startA && startB) return 1;
+
+        // 3. Ends With priority (Great for "last 4 digits" search)
+        const endA = textA.endsWith(query);
+        const endB = textB.endsWith(query);
+        if (endA && !endB) return -1;
+        if (!endA && endB) return 1;
+
+        // 4. Alphabetical fallback
+        return textA.localeCompare(textB);
+    });
+
+    // Return top 100
+    res.json(suggestions.slice(0, 100));
 });
 
 app.use(express.static('public'));
@@ -131,10 +153,6 @@ app.get('/api/search', async (req, res) => {
         return res.status(400).json({ error: 'Search term is required' });
     }
 
-    // STRICT FILTER: Allow 8 to 13 digits
-    if (!/^\d{8,13}$/.test(term)) {
-        return res.json([]);
-    }
     const searchDir = dir || __dirname; // Default to current directory if not provided
 
     if (!fs.existsSync(searchDir)) {
